@@ -85,3 +85,15 @@ After local administrator sign-in, the schedule becomes a spreadsheet: one row p
 States match the supplied Excel legend: Recovery (cyan), Training (purple), Leave (light green), Illness/vaccination (green), Friday/holiday (orange), Saturday (yellow), Telework (red). Working cells are unfilled white. Friday/holiday and Saturday date headers are highlighted automatically. Non-working states remove the engineer from active coverage; telework remains active coverage. Unspecified absences from older schedules are labeled Not scheduled rather than guessed as leave.
 
 To seed a month, create/select it and configure the first day's cells, including exactly one working evening engineer. Click **Plan month from first day**. The first date is preserved exactly; the remaining dates are generated as a private draft with rotation, recovery and eligibility checks. If the previous month exists its recovery constraints still apply. A new standalone month can start from a configured first day even without prior history. Review, then publish/save. Leave, illness and training apply only to the specified date, with no implied multi-day duration. Old backups remain compatible; new backups and shared HTML snapshots retain cell states.
+
+## Compact planning, contacts and switches
+
+The administrator schedule defaults to **Fit full month**, with dense rows and columns sized to show all dates and engineers on a desktop display. **Comfortable view** restores larger cells. The 31-day grid was checked at 1280×720; narrow/mobile displays retain horizontal scrolling.
+
+Column headings show editable time ranges instead of slot numbers. Click a heading to set its start and end; these are column labels shared across months. A cell's Day/Evening role remains independently selected for rotation eligibility. Time preferences survive reload, JSON backups and shared HTML exports.
+
+Friday/holiday rows are orange and Saturdays yellow across the grid. Recovery, leave, training, illness and telework retain their own state colors within those rows. Recovery is computed for the next two calendar days after the end of an actual consecutive evening block, including blocks interrupted by a manual switch. Conflicting evening assignments are rejected; daytime coverage is removed for recovery.
+
+**Switch engineers** asks whether to swap just the selected pair from a chosen date onward, or to replan all remaining turns from that date. Both paths create a review draft. Editing a cell's engineer also offers a date-only swap. Earlier dates remain unchanged; current eligibility and recovery constraints apply. Midmonth replanning retains the configured anchor day and prior dates.
+
+The sidebar now lists each engineer's full name and telephone number below Shift history, using the user-provided contact table. Contacts can be edited in Team members and are retained in local backups and shared copies. Older local data receives the initial contacts without overwriting values the administrator has already entered. The intentionally supplied directory is stored in `resources/contacts.json`; the history archive itself still excludes phone and identifier columns.

@@ -29,6 +29,13 @@ class ShiftTests(unittest.TestCase):
         cookie=login.headers['Set-Cookie'].split(';')[0]
         with self.assertRaises(urllib.error.HTTPError) as e:self.request('/api/history',{'month':'2024-01','roster':[]},cookie)
         self.assertEqual(e.exception.code,404)
+    def test_contacts_and_column_times(self):
+        state=json.load(self.request('/api/state'))
+        self.assertTrue(all(w['phone'] and w['fullName'] for w in state['workers']))
+        login=self.request('/api/login',{'username':'admin','password':'test-password-1234'});cookie=login.headers['Set-Cookie'].split(';')[0]
+        self.request('/api/preferences',{'columnTimes':[{'start':'16:00','end':'22:00'}]},cookie)
+        self.assertEqual(json.load(self.request('/api/state'))['columnTimes'][0]['start'],'16:00')
+        with self.assertRaises(urllib.error.HTTPError):self.request('/api/preferences',{'columnTimes':[{'start':'24:00','end':'22:00'}]},cookie)
     def test_seed_matches_supplied_month(self):
         state=json.load(self.request('/api/state')); rows=state['months']['2026-11']
         self.assertEqual(len(rows),30);self.assertEqual(len(state['workers']),9)

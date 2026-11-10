@@ -13,28 +13,32 @@ def generate(month, workers, months, holidays=None, first_day=None):
         raise ValueError('Choose a valid month.')
     last = first.replace(day=calendar.monthrange(first.year, first.month)[1])
     if first_day:
-        if first_day.get('date')!=first.isoformat() or len(first_day.get('night',[]))!=1:raise ValueError('The first day needs exactly one evening engineer.')
+        start=date.fromisoformat(first_day.get('date',''))
+        if start.strftime('%Y-%m')!=month or len(first_day.get('night',[]))!=1:raise ValueError('Select a date in this month with exactly one evening engineer.')
+        first=start
     previous = (first - ONE).strftime('%Y-%m')
-    has_previous=previous in months
-    if not has_previous and not first_day:
-        raise ValueError('Plan the previous month first so rotation and rest days can continue correctly.')
-    boundary = {r['date']: r for r in months.get(previous,[])}
-    for offset in range(1, 8):
-        row = boundary.get((first - timedelta(days=offset)).isoformat())
-        if has_previous and (not row or len(row.get('night', [])) != 1):
-            raise ValueError('Complete the final seven evening assignments of the previous month before generating.')
+    boundary = {r['date']:r for rows in months.values() for r in rows if r['date']<first.isoformat()}
+    has_previous=all((first-timedelta(days=n)).isoformat() in boundary and len(boundary[(first-timedelta(days=n)).isoformat()].get('night',[]))==1 for n in range(1,8))
+    if not first_day and previous not in months:raise ValueError('Plan the previous month first so rotation and rest days can continue correctly.')
+    if not first_day and not has_previous:raise ValueError('Complete the final seven evening assignments of the previous month before generating.')
     pool = [w['id'] for w in workers if w['kind'] == 'both']
     ids = [w['id'] for w in workers]
     friday_pool = {w['id'] for w in workers if w.get('friday',1)}
     if len(pool) < 2:
         raise ValueError('At least two day-and-evening employees are needed for the two rotations.')
-    external = {date.fromisoformat(r['date']): r for m, rows in months.items() if m != month for r in rows}
+    external = {date.fromisoformat(r['date']): r for m, rows in months.items() for r in rows if m != month or r['date']<first.isoformat()}
     night_count = Counter(i for d, r in external.items() if d < first for i in r['night'])
     special = sorted((d,r) for d,r in external.items() if d < first and is_rotation_day(d,holidays))
     friday_count = Counter(i for d,r in special for i in r['day'])
     last_turn = {i:d for d,r in special for i in r['day']}
     # Start one week earlier to account for both rest patterns at the boundary.
     sunday = first - timedelta(days=(first.weekday() + 1) % 7 + 7)
+    extra_rest={}
+    if first_day:
+        previous_row=external.get(first-ONE)
+        if previous_row:
+            for engineer in set(previous_row['night'])-set(first_day['night']):
+                for n in (0,1):extra_rest.setdefault(first+timedelta(days=n),set()).add(engineer)
     blocks = {}
     previous_owner = None
     cursor = sunday
@@ -63,8 +67,10 @@ def generate(month, workers, months, holidays=None, first_day=None):
             if relevant and owner == previous_owner and (has_previous or not seeded):
                 raise ValueError(f'The rotation starting {cursor} conflicts with recovery days from the previous rotation.')
         else:
-            candidates = [i for i in pool if i != previous_owner]
+            candidates = [i for i in pool if i != previous_owner and not any(i in extra_rest.get(d,set()) for d in dates)]
+            if not candidates:raise ValueError('No eligible evening engineer is available without violating recovery.')
             owner = min(candidates, key=lambda i: (night_count[i], pool.index(i)))
+        if any(owner in extra_rest.get(d,set()) for d in dates):raise ValueError('An evening assignment conflicts with two recovery days after the previous block.')
         blocks[cursor] = owner
         night_count[owner] += sum(d >= first and d not in external for d in dates)
         previous_owner = owner
@@ -82,6 +88,7 @@ def generate(month, workers, months, holidays=None, first_day=None):
             rest={i for i in rest if first_day and any(c.get('workerId')==i and c.get('state')=='recovery' for c in first_day.get('cells',[]))}
         if first_day and first.weekday() in (6,2) and d<=first+ONE:
             rest.update(c['workerId'] for c in first_day.get('cells',[]) if c['state']=='recovery')
+        rest.update(extra_rest.get(d,set()))
         available = [i for i in ids if i != night and i not in rest]
         if is_rotation_day(d,holidays):
             available = [i for i in available if i in friday_pool]

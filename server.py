@@ -10,6 +10,7 @@ from holidays import FIXED, holiday_name, is_rotation_day
 ROOT = Path(__file__).parent
 DB = Path(os.environ.get('SHIFT_DB', ROOT / 'data/shift.db'))
 SESSIONS = {}
+CONTACTS=json.loads((ROOT/'resources/contacts.json').read_text())
 NAMES = ['Billel','Samir','Walid','Abderrahim','Sid Ali','Yougo','Lamine','Amine','Oumama']
 # Exact transcription of the supplied November 2026 roster.
 DAY = ['B','W A S Y L M','W A S Y L M B','O A S Y L M B','O A S Y L M B','O','A','B R S Y L M','B R S Y L M O','B R S Y L M O W','R S Y L O W','R S Y L M O W','R','M','O W S Y L A','O W S Y L A R','O W S Y L A R B','O W S Y L A B','O W S Y L A B','Y','O','B M S Y L A W','B M S Y L A W','B M S R L A W','B M S R L Y W','B M S R L Y W','M','W','B R S Y L O','B R S Y L O M']
@@ -24,11 +25,16 @@ def initialize():
     with connect() as c:
         c.executescript('CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT); CREATE TABLE IF NOT EXISTS workers(id INTEGER PRIMARY KEY,name TEXT NOT NULL,kind TEXT NOT NULL); CREATE TABLE IF NOT EXISTS months(month TEXT PRIMARY KEY,roster TEXT NOT NULL);')
         c.execute('CREATE TABLE IF NOT EXISTS holidays(day TEXT PRIMARY KEY, name TEXT NOT NULL)')
+        for column in ['phone','fullName']:
+            if column not in {r['name'] for r in c.execute('PRAGMA table_info(workers)')}:
+                c.execute(f"ALTER TABLE workers ADD COLUMN {column} TEXT NOT NULL DEFAULT ''")
+                for name,contact in CONTACTS.items():c.execute(f'UPDATE workers SET {column}=? WHERE name=?',(contact[column],name))
         if 'friday' not in {r['name'] for r in c.execute('PRAGMA table_info(workers)')}:
             c.execute('ALTER TABLE workers ADD COLUMN friday INTEGER NOT NULL DEFAULT 1')
             c.execute("UPDATE workers SET friday=0 WHERE lower(replace(name,' ','')) IN ('sidali','lamine')")
         if not c.execute('SELECT 1 FROM settings WHERE key="initialized"').fetchone():
             for name in NAMES: c.execute('INSERT INTO workers(name,kind,friday) VALUES (?,?,?)',(name,'day' if name in ['Sid Ali','Yougo','Lamine'] else 'both',int(name not in ['Sid Ali','Lamine'])))
+            for name,contact in CONTACTS.items():c.execute('UPDATE workers SET phone=?,fullName=? WHERE name=?',(contact['phone'],contact['fullName'],name))
             ids={r['name']:r['id'] for r in c.execute('SELECT * FROM workers')}
             roster=[{'date':f'2026-11-{i+1:02}', 'day':[ids[CODES[x]] for x in s.split()], 'night':[ids[CODES[NIGHT[i]]]]} for i,s in enumerate(DAY)]
             c.execute('INSERT INTO months VALUES (?,?)',('2026-11',json.dumps(roster)))
@@ -84,7 +90,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send(200,ARCHIVE); return
         if self.path=='/api/state':
             with connect() as c:
-                self.send(200,{'holidays':dict(c.execute('SELECT day,name FROM holidays').fetchall()),'fixedHolidays':FIXED,'historySummary':ARCHIVE['metadata'],'admin':self.authenticated(),'adminConfigured':bool(c.execute('SELECT 1 FROM settings WHERE key="password"').fetchone()),'workers':[dict(r) for r in c.execute('SELECT * FROM workers')], 'months':{r['month']:json.loads(r['roster']) for r in c.execute('SELECT * FROM months')}})
+                self.send(200,{'holidays':dict(c.execute('SELECT day,name FROM holidays').fetchall()),'fixedHolidays':FIXED,'columnTimes':json.loads((c.execute("SELECT value FROM settings WHERE key='columnTimes'").fetchone() or ['[]'])[0]),'historySummary':ARCHIVE['metadata'],'identities':json.loads(c.execute("SELECT value FROM settings WHERE key='history_worker_ids'").fetchone()[0]),'admin':self.authenticated(),'adminConfigured':bool(c.execute('SELECT 1 FROM settings WHERE key="password"').fetchone()),'workers':[dict(r) for r in c.execute('SELECT * FROM workers')], 'months':{r['month']:json.loads(r['roster']) for r in c.execute('SELECT * FROM months')}})
             return
         paths={'/':'index.html','/app.js':'app.js','/sheet.js':'sheet.js','/style.css':'style.css'}
         if self.path not in paths: self.send(404,{'error':'Not found'}); return
@@ -121,10 +127,14 @@ class Handler(BaseHTTPRequestHandler):
                     identities=json.loads(c.execute("SELECT value FROM settings WHERE key='history_worker_ids'").fetchone()[0])
                     months=combined_months(months,identities)
                     holidays={**historical_special_days(),**dict(c.execute('SELECT day,name FROM holidays').fetchall())}
+                    if body.get('contextRows'):
+                        validate(body['contextRows'],body['month'],workers,holidays)
+                        months[body['month']]=body['contextRows']
                     first_day=body.get('firstDay')
                     if first_day:
                         validate_cells(first_day,workers)
                     roster=generate(body['month'],workers,months,holidays,first_day)
+                    if first_day:roster=[r for r in months.get(body['month'],[]) if r['date']<first_day['date']]+roster
                     validate(roster,body['month'],workers,holidays)
                     self.send(200,{'roster':roster}); return
                 elif self.path=='/api/month':
@@ -138,8 +148,16 @@ class Handler(BaseHTTPRequestHandler):
                     else:
                         if not name or len(name)>80: raise ValueError('Enter a holiday name (up to 80 characters).')
                         c.execute('INSERT OR REPLACE INTO holidays VALUES (?,?)',(day,name))
+                elif self.path=='/api/preferences':
+                    import re
+                    times=body.get('columnTimes')
+                    if not isinstance(times,list) or len(times)>200 or any(not isinstance(t,dict) or not re.fullmatch(r'([01]\d|2[0-3]):[0-5]\d',t.get('start','')) or not re.fullmatch(r'([01]\d|2[0-3]):[0-5]\d',t.get('end','')) or t['start']>=t['end'] for t in times):raise ValueError('Enter valid start/end times.')
+                    c.execute("INSERT OR REPLACE INTO settings VALUES ('columnTimes',?)",(json.dumps(times),))
                 elif self.path=='/api/worker':
                     name=str(body.get('name','')).strip(); kind=body.get('kind'); wid=body.get('id'); friday=body.get('friday',True)
+                    phone=str(body.get('phone','')).strip();full_name=str(body.get('fullName',name)).strip()
+                    import re
+                    if len(phone)>30 or not re.fullmatch(r'[+0-9 ()-]*',phone) or len(full_name)>100:raise ValueError('Enter a valid full name and phone number.')
                     if type(friday)!=bool: raise ValueError('Choose a valid Friday availability.')
                     if not name or len(name)>60 or kind not in ['day','both']: raise ValueError('Enter a name and valid shift type.')
                     if c.execute('SELECT 1 FROM workers WHERE lower(name)=lower(?) AND id!=?',(name,wid or 0)).fetchone(): raise ValueError('This employee already exists.')
@@ -151,8 +169,8 @@ class Handler(BaseHTTPRequestHandler):
                         if not friday:
                             for r in c.execute('SELECT roster FROM months'):
                                 if any(wid in d['day'] and d['date']>=time.strftime('%Y-%m-%d') and is_rotation_day(d['date'],dict(c.execute('SELECT day,name FROM holidays').fetchall())) for d in json.loads(r[0])): raise ValueError('Remove this employee from current and future Friday / holiday day shifts before changing eligibility.')
-                        c.execute('UPDATE workers SET name=?,kind=?,friday=? WHERE id=?',(name,kind,int(friday),wid))
-                    else: c.execute('INSERT INTO workers(name,kind,friday) VALUES (?,?,?)',(name,kind,int(friday)))
+                        c.execute('UPDATE workers SET name=?,kind=?,friday=?,phone=?,fullName=? WHERE id=?',(name,kind,int(friday),phone,full_name,wid))
+                    else: c.execute('INSERT INTO workers(name,kind,friday,phone,fullName) VALUES (?,?,?,?,?)',(name,kind,int(friday),phone,full_name))
                 else: self.send(404,{'error':'Not found'}); return
             self.send(200,{'ok':True})
         except (ValueError,KeyError,TypeError) as e: self.send(400,{'error':str(e)})
