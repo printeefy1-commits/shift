@@ -1,0 +1,821 @@
+{
+  "policy": "Keep both sources separately. No automatic merge or replacement.",
+  "text_source": [
+    {
+      "date": "2026-11-01",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "day": [
+        "Walid",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "day": [
+        "Walid",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "day": [
+        "Oumama",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "day": [
+        "Oumama",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Oumama"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Oumama",
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "day": [
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Oumama",
+        "Walid"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "day": [
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Oumama",
+        "Walid"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim"
+      ],
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-16",
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Samir"
+      ],
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Samir",
+        "Billel"
+      ],
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-21",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-22",
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-24",
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Samir",
+        "Lamine",
+        "Abderrahim",
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Samir",
+        "Lamine",
+        "Yougo",
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Samir",
+        "Lamine",
+        "Yougo",
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-29",
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Oumama"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-30",
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Oumama",
+        "Amine"
+      ],
+      "night": [
+        "Walid"
+      ]
+    }
+  ],
+  "excel_source": [
+    {
+      "date": "2026-11-01",
+      "source_row": 1080,
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "source_row": 1081,
+      "day": [
+        "Walid",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "source_row": 1082,
+      "day": [
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "source_row": 1083,
+      "day": [
+        "Oumama",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "source_row": 1084,
+      "day": [
+        "Oumama",
+        "Abderrahim",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "source_row": 1085,
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "source_row": 1086,
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "source_row": 1087,
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "source_row": 1088,
+      "day": [
+        "Billel",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Oumama"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "source_row": 1089,
+      "day": [
+        "Billel",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Oumama",
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "source_row": 1090,
+      "day": [
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Oumama",
+        "Walid",
+        "Amine"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "source_row": 1091,
+      "day": [
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Amine",
+        "Oumama",
+        "Walid"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "source_row": 1092,
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "source_row": 1093,
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "source_row": 1094,
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim"
+      ],
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-16",
+      "source_row": 1095,
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Samir"
+      ],
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "source_row": 1096,
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Samir",
+        "Billel"
+      ],
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "source_row": 1097,
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "source_row": 1098,
+      "day": [
+        "Oumama",
+        "Walid",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "source_row": 1099,
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-21",
+      "source_row": 1100,
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-22",
+      "source_row": 1101,
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "source_row": 1102,
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Abderrahim",
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-24",
+      "source_row": 1103,
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Samir",
+        "Lamine",
+        "Abderrahim",
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "source_row": 1104,
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Samir",
+        "Lamine",
+        "Yougo",
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "source_row": 1105,
+      "day": [
+        "Billel",
+        "Amine",
+        "Sid Ali",
+        "Samir",
+        "Lamine",
+        "Yougo",
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "source_row": 1106,
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "source_row": 1107,
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-29",
+      "source_row": 1108,
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Oumama"
+      ],
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-30",
+      "source_row": 1109,
+      "day": [
+        "Billel",
+        "Samir",
+        "Sid Ali",
+        "Yougo",
+        "Lamine",
+        "Oumama",
+        "Amine"
+      ],
+      "night": [
+        "Walid"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1684 @@
+{
+  "count": 1064,
+  "range": [
+    "2024-01-01",
+    "2026-11-30"
+  ],
+  "missing": [
+    "2024-11-17"
+  ],
+  "duplicate_dates": [],
+  "years": {
+    "2024": {
+      "days": 365,
+      "night_counts": {
+        "Amine": 54,
+        "Walid": 56,
+        "Billel": 47,
+        "Yougo": 11,
+        "Abderrahim": 51,
+        "Oumama": 49,
+        "Sid Ali": 48,
+        "Samir": 49
+      },
+      "friday_day_counts": {
+        "Oumama": 7,
+        "Amine": 6,
+        "Billel": 5,
+        "Abderrahim": 8,
+        "Sid Ali": 5,
+        "Yougo": 10,
+        "Samir": 5,
+        "Walid": 6
+      },
+      "blocks_total": 103,
+      "blocks_match": 101,
+      "recovery_checks": 205,
+      "recovery_absent": 201,
+      "saturdays_checked": 51,
+      "saturdays_match": 46,
+      "template_agreement": 365,
+      "multiple_night_rows": 0
+    },
+    "2025": {
+      "days": 365,
+      "night_counts": {
+        "Oumama": 57,
+        "Sid Ali": 45,
+        "Walid": 56,
+        "Billel": 52,
+        "Amine": 56,
+        "Samir": 50,
+        "Abderrahim": 49
+      },
+      "friday_day_counts": {
+        "Billel": 6,
+        "Amine": 8,
+        "Sid Ali": 4,
+        "Walid": 6,
+        "Samir": 8,
+        "Oumama": 7,
+        "Yougo": 8,
+        "Abderrahim": 5
+      },
+      "blocks_total": 105,
+      "blocks_match": 105,
+      "recovery_checks": 210,
+      "recovery_absent": 207,
+      "saturdays_checked": 52,
+      "saturdays_match": 47,
+      "template_agreement": 361,
+      "multiple_night_rows": 0
+    },
+    "2026": {
+      "days": 334,
+      "night_counts": {
+        "Samir": 62,
+        "Oumama": 55,
+        "Billel": 61,
+        "Abderrahim": 52,
+        "Walid": 55,
+        "Amine": 49
+      },
+      "friday_day_counts": {
+        "Billel": 5,
+        "Amine": 8,
+        "Oumama": 6,
+        "Abderrahim": 8,
+        "Samir": 6,
+        "Yougo": 10,
+        "Walid": 5
+      },
+      "blocks_total": 94,
+      "blocks_match": 94,
+      "recovery_checks": 188,
+      "recovery_absent": 183,
+      "saturdays_checked": 48,
+      "saturdays_match": 43,
+      "template_agreement": 334,
+      "multiple_night_rows": 0
+    }
+  },
+  "exceptions": {
+    "2024": {
+      "blocks": [
+        [
+          "2024-07-24",
+          false,
+          [
+            "Oumama"
+          ]
+        ],
+        [
+          "2024-09-18",
+          false,
+          [
+            "Abderrahim"
+          ]
+        ]
+      ],
+      "recovery": [
+        [
+          "2024-07-24",
+          "2024-07-28",
+          false
+        ],
+        [
+          "2024-09-18",
+          "2024-09-22",
+          false
+        ],
+        [
+          "2024-09-18",
+          "2024-09-23",
+          false
+        ],
+        [
+          "2024-10-02",
+          "2024-10-07",
+          false
+        ]
+      ],
+      "saturday": [
+        [
+          "2024-03-16",
+          false,
+          [
+            "Abderrahim"
+          ],
+          [
+            "Samir"
+          ]
+        ],
+        [
+          "2024-03-23",
+          false,
+          [
+            "Yougo"
+          ],
+          [
+            "Walid"
+          ]
+        ],
+        [
+          "2024-03-30",
+          false,
+          [
+            "Abderrahim"
+          ],
+          [
+            "Oumama"
+          ]
+        ],
+        [
+          "2024-04-06",
+          false,
+          [
+            "Yougo"
+          ],
+          [
+            "Amine"
+          ]
+        ],
+        [
+          "2024-07-20",
+          false,
+          [
+            "Oumama"
+          ],
+          [
+            "Billel"
+          ]
+        ]
+      ]
+    },
+    "2025": {
+      "blocks": [],
+      "recovery": [
+        [
+          "2025-04-27",
+          "2025-05-01",
+          false
+        ],
+        [
+          "2025-05-11",
+          "2025-05-15",
+          false
+        ],
+        [
+          "2025-12-03",
+          "2025-12-08",
+          false
+        ]
+      ],
+      "saturday": [
+        [
+          "2025-03-01",
+          false,
+          [
+            "Samir"
+          ],
+          [
+            "Billel"
+          ]
+        ],
+        [
+          "2025-03-08",
+          false,
+          [
+            "Yougo"
+          ],
+          [
+            "Samir"
+          ]
+        ],
+        [
+          "2025-03-15",
+          false,
+          [
+            "Amine"
+          ],
+          [
+            "Walid"
+          ]
+        ],
+        [
+          "2025-03-22",
+          false,
+          [
+            "Yougo"
+          ],
+          [
+            "Amine"
+          ]
+        ],
+        [
+          "2025-03-29",
+          false,
+          [
+            "Abderrahim"
+          ],
+          [
+            "Oumama"
+          ]
+        ]
+      ]
+    },
+    "2026": {
+      "blocks": [],
+      "recovery": [
+        [
+          "2026-01-14",
+          "2026-01-19",
+          false
+        ],
+        [
+          "2026-05-24",
+          "2026-05-28",
+          false
+        ],
+        [
+          "2026-06-21",
+          "2026-06-24",
+          false
+        ],
+        [
+          "2026-10-18",
+          "2026-10-22",
+          false
+        ],
+        [
+          "2026-10-21",
+          "2026-10-26",
+          false
+        ]
+      ],
+      "saturday": [
+        [
+          "2026-02-21",
+          false,
+          [
+            "Amine"
+          ],
+          [
+            "Samir"
+          ]
+        ],
+        [
+          "2026-02-28",
+          false,
+          [
+            "Yougo"
+          ],
+          [
+            "Billel"
+          ]
+        ],
+        [
+          "2026-03-07",
+          false,
+          [
+            "Abderrahim"
+          ],
+          [
+            "Walid"
+          ]
+        ],
+        [
+          "2026-03-14",
+          false,
+          [
+            "Yougo"
+          ],
+          [
+            "Amine"
+          ]
+        ],
+        [
+          "2026-06-20",
+          false,
+          [
+            "Billel"
+          ],
+          [
+            "Samir"
+          ]
+        ]
+      ]
+    }
+  },
+  "first_last_evening": {
+    "Amine": [
+      "2024-01-01",
+      "2026-11-17"
+    ],
+    "Walid": [
+      "2024-01-03",
+      "2026-11-30"
+    ],
+    "Abderrahim": [
+      "2024-01-14",
+      "2026-11-28"
+    ],
+    "Billel": [
+      "2024-01-07",
+      "2026-11-14"
+    ],
+    "Sid Ali": [
+      "2024-01-21",
+      "2025-10-28"
+    ],
+    "Oumama": [
+      "2024-01-17",
+      "2026-11-24"
+    ],
+    "Yougo": [
+      "2024-01-10",
+      "2024-02-24"
+    ],
+    "Samir": [
+      "2024-02-04",
+      "2026-11-21"
+    ]
+  },
+  "november_differences": [
+    {
+      "date": "2026-11-02",
+      "row": 1081,
+      "text_only": [],
+      "excel_only": [
+        "Billel"
+      ],
+      "night_excel": [
+        "Samir"
+      ],
+      "night_text": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "row": 1082,
+      "text_only": [
+        "Walid"
+      ],
+      "excel_only": [],
+      "night_excel": [
+        "Samir"
+      ],
+      "night_text": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "row": 1083,
+      "text_only": [
+        "Billel"
+      ],
+      "excel_only": [],
+      "night_excel": [
+        "Walid"
+      ],
+      "night_text": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "row": 1088,
+      "text_only": [
+        "Samir"
+      ],
+      "excel_only": [],
+      "night_excel": [
+        "Abderrahim"
+      ],
+      "night_text": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "row": 1089,
+      "text_only": [
+        "Samir"
+      ],
+      "excel_only": [],
+      "night_excel": [
+        "Abderrahim"
+      ],
+      "night_text": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "row": 1090,
+      "text_only": [],
+      "excel_only": [
+        "Amine"
+      ],
+      "night_excel": [
+        "Billel"
+      ],
+      "night_text": [
+        "Billel"
+      ]
+    }
+  ],
+  "recent_blocks": [
+    {
+      "date": "2026-09-02",
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-09-06",
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-09-20",
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-09-27",
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-09-30",
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-10-18",
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-10-25",
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "night": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "night": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "night": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "night": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-22",
+      "night": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "night": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-11-29",
+      "night": [
+        "Walid"
+      ]
+    }
+  ],
+  "recent_fridays": [
+    {
+      "date": "2026-08-07",
+      "day": [
+        "Yougo"
+      ]
+    },
+    {
+      "date": "2026-08-14",
+      "day": [
+        "Billel"
+      ]
+    },
+    {
+      "date": "2026-08-21",
+      "day": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "day": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "day": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "day": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-09-18",
+      "day": [
+        "Yougo"
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "day": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "day": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "day": [
+        "Amine"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "day": [
+        "Abderrahim"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "day": [
+        "Yougo"
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "day": [
+        "Walid"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "day": [
+        "Oumama"
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "day": [
+        "Samir"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "day": [
+        "Yougo"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "day": [
+        "Amine"
+      ]
+    }
+  ],
+  "thin_weekdays": [
+    {
+      "date": "2024-01-01",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 5
+    },
+    {
+      "date": "2024-03-11",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 80
+    },
+    {
+      "date": "2024-03-12",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 81
+    },
+    {
+      "date": "2024-03-13",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 82
+    },
+    {
+      "date": "2024-03-14",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 83
+    },
+    {
+      "date": "2024-03-17",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 86
+    },
+    {
+      "date": "2024-03-18",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 87
+    },
+    {
+      "date": "2024-03-19",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 88
+    },
+    {
+      "date": "2024-03-20",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 89
+    },
+    {
+      "date": "2024-03-21",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 90
+    },
+    {
+      "date": "2024-03-24",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 93
+    },
+    {
+      "date": "2024-03-25",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 94
+    },
+    {
+      "date": "2024-03-26",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 95
+    },
+    {
+      "date": "2024-03-27",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 96
+    },
+    {
+      "date": "2024-03-28",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 97
+    },
+    {
+      "date": "2024-03-31",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 100
+    },
+    {
+      "date": "2024-04-01",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 102
+    },
+    {
+      "date": "2024-04-02",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 103
+    },
+    {
+      "date": "2024-04-03",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 104
+    },
+    {
+      "date": "2024-04-04",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 105
+    },
+    {
+      "date": "2024-04-07",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 108
+    },
+    {
+      "date": "2024-04-08",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 109
+    },
+    {
+      "date": "2024-04-09",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 110
+    },
+    {
+      "date": "2024-04-10",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 112
+    },
+    {
+      "date": "2024-04-11",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 113
+    },
+    {
+      "date": "2024-05-01",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 134
+    },
+    {
+      "date": "2024-06-16",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 181
+    },
+    {
+      "date": "2024-06-17",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 182
+    },
+    {
+      "date": "2024-06-18",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 183
+    },
+    {
+      "date": "2024-07-07",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Abderrahim"
+      ],
+      "row": 203
+    },
+    {
+      "date": "2024-07-16",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 212
+    },
+    {
+      "date": "2024-09-16",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 276
+    },
+    {
+      "date": "2025-01-01",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 386
+    },
+    {
+      "date": "2025-01-12",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 397
+    },
+    {
+      "date": "2025-03-02",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 448
+    },
+    {
+      "date": "2025-03-03",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 449
+    },
+    {
+      "date": "2025-03-04",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 450
+    },
+    {
+      "date": "2025-03-05",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 451
+    },
+    {
+      "date": "2025-03-06",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 452
+    },
+    {
+      "date": "2025-03-09",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 455
+    },
+    {
+      "date": "2025-03-10",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 456
+    },
+    {
+      "date": "2025-03-11",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 457
+    },
+    {
+      "date": "2025-03-12",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 458
+    },
+    {
+      "date": "2025-03-13",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 459
+    },
+    {
+      "date": "2025-03-16",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 462
+    },
+    {
+      "date": "2025-03-17",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 463
+    },
+    {
+      "date": "2025-03-18",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 464
+    },
+    {
+      "date": "2025-03-19",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 465
+    },
+    {
+      "date": "2025-03-20",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Sid Ali"
+      ],
+      "row": 466
+    },
+    {
+      "date": "2025-03-23",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 469
+    },
+    {
+      "date": "2025-03-24",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 470
+    },
+    {
+      "date": "2025-03-25",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 471
+    },
+    {
+      "date": "2025-03-26",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 472
+    },
+    {
+      "date": "2025-03-27",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 473
+    },
+    {
+      "date": "2025-03-30",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 476
+    },
+    {
+      "date": "2025-03-31",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 478
+    },
+    {
+      "date": "2025-04-01",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 480
+    },
+    {
+      "date": "2025-04-02",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 481
+    },
+    {
+      "date": "2025-04-03",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 482
+    },
+    {
+      "date": "2025-05-01",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Abderrahim"
+      ],
+      "row": 511
+    },
+    {
+      "date": "2025-06-08",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 550
+    },
+    {
+      "date": "2025-07-06",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 579
+    },
+    {
+      "date": "2026-01-01",
+      "day": [
+        "Yougo"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 764
+    },
+    {
+      "date": "2026-01-11",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Abderrahim"
+      ],
+      "row": 774
+    },
+    {
+      "date": "2026-01-12",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Abderrahim"
+      ],
+      "row": 775
+    },
+    {
+      "date": "2026-02-19",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 815
+    },
+    {
+      "date": "2026-02-22",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 818
+    },
+    {
+      "date": "2026-02-23",
+      "day": [
+        "Amine"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 819
+    },
+    {
+      "date": "2026-02-24",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 820
+    },
+    {
+      "date": "2026-02-25",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 821
+    },
+    {
+      "date": "2026-02-26",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 822
+    },
+    {
+      "date": "2026-03-01",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 826
+    },
+    {
+      "date": "2026-03-02",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 827
+    },
+    {
+      "date": "2026-03-03",
+      "day": [
+        "Samir"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 828
+    },
+    {
+      "date": "2026-03-04",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 829
+    },
+    {
+      "date": "2026-03-05",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 830
+    },
+    {
+      "date": "2026-03-08",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 833
+    },
+    {
+      "date": "2026-03-09",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 834
+    },
+    {
+      "date": "2026-03-10",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Walid"
+      ],
+      "row": 835
+    },
+    {
+      "date": "2026-03-11",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 836
+    },
+    {
+      "date": "2026-03-12",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 837
+    },
+    {
+      "date": "2026-03-15",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 840
+    },
+    {
+      "date": "2026-03-16",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 841
+    },
+    {
+      "date": "2026-03-17",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 842
+    },
+    {
+      "date": "2026-03-18",
+      "day": [
+        "Walid"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 843
+    },
+    {
+      "date": "2026-03-19",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 844
+    },
+    {
+      "date": "2026-03-22",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Abderrahim"
+      ],
+      "row": 848
+    },
+    {
+      "date": "2026-05-27",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 916
+    },
+    {
+      "date": "2026-05-28",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 917
+    },
+    {
+      "date": "2026-06-16",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 937
+    },
+    {
+      "date": "2026-06-25",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Oumama"
+      ],
+      "row": 946
+    },
+    {
+      "date": "2026-07-02",
+      "day": [
+        "Sid Ali"
+      ],
+      "night": [
+        "Billel"
+      ],
+      "row": 954
+    },
+    {
+      "date": "2026-07-05",
+      "day": [
+        "Abderrahim"
+      ],
+      "night": [
+        "Amine"
+      ],
+      "row": 957
+    },
+    {
+      "date": "2026-08-25",
+      "day": [
+        "Oumama"
+      ],
+      "night": [
+        "Abderrahim"
+      ],
+      "row": 1009
+    },
+    {
+      "date": "2026-11-01",
+      "day": [
+        "Billel"
+      ],
+      "night": [
+        "Samir"
+      ],
+      "row": 1080
+    }
+  ]
+}
