@@ -28,4 +28,8 @@ The 35-month history, both November 2026 sources and difference table are
 included. Generation follows regular-month rules, with Friday/holiday rotation
 from 2025-01-01 and Sid Ali / Lamine excluded by default. Ramadan planning is
 not implemented. Add confirmed future religious holiday dates in Public holidays.
+Admin schedule: click a cell to choose engineer, shift and colored state.
+Configure day one, then choose Plan month from first day to generate a draft.
+Review it and publish/save. Leave/training/illness apply only to that date.
+Export a backup before replacing this HTML file to keep your existing data.
 Print / PDF uses your browser print dialog (choose Save as PDF).

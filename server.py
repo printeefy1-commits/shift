@@ -53,6 +53,7 @@ def validate(roster, month, workers, holidays=None):
     kinds={w['id']:w['kind'] for w in workers}
     no_friday={w['id'] for w in workers if not w.get('friday',1)}
     for i,row in enumerate(roster):
+        validate_cells(row,workers)
         if row.get('date')!=f'{month}-{i+1:02}': raise ValueError('Dates must match the selected month.')
         for key in ['day','night']:
             ids=row.get(key)
@@ -60,6 +61,15 @@ def validate(roster, month, workers, holidays=None):
         if is_rotation_day(row['date'],holidays) and no_friday.intersection(row['day']): raise ValueError('An employee selected for Friday / holiday daytime is not eligible.')
         if set(row['day']) & set(row['night']): raise ValueError('A person cannot work both shifts on the same day.')
         if any(kinds[x]=='day' for x in row['night']): raise ValueError('Day-only employees cannot work evening shifts.')
+
+CELL_STATES={'working','recovery','training','leave','sick','fridayHoliday','saturday','telework','unscheduled'}
+def validate_cells(row,workers):
+    if 'cells' not in row:return
+    cells=row['cells'];ids={w['id'] for w in workers}
+    if not isinstance(cells,list) or any(not isinstance(c,dict) for c in cells) or len(cells)>len(ids) or len({c.get('workerId') for c in cells})!=len(cells) or not {c.get('workerId') for c in cells}.issubset(ids) or any(c.get('state') not in CELL_STATES or c.get('shift') not in ('day','night') for c in cells):raise ValueError('Each engineer must appear once with a valid state and shift.')
+    for key in ['day','night']:
+        projected={c['workerId'] for c in cells if c['shift']==key and c['state'] in ('working','telework','fridayHoliday','saturday')}
+        if projected!=set(row[key]):raise ValueError('Engineer states do not match shift assignments.')
 
 class Handler(BaseHTTPRequestHandler):
     def send(self,status,data):
@@ -76,7 +86,7 @@ class Handler(BaseHTTPRequestHandler):
             with connect() as c:
                 self.send(200,{'holidays':dict(c.execute('SELECT day,name FROM holidays').fetchall()),'fixedHolidays':FIXED,'historySummary':ARCHIVE['metadata'],'admin':self.authenticated(),'adminConfigured':bool(c.execute('SELECT 1 FROM settings WHERE key="password"').fetchone()),'workers':[dict(r) for r in c.execute('SELECT * FROM workers')], 'months':{r['month']:json.loads(r['roster']) for r in c.execute('SELECT * FROM months')}})
             return
-        paths={'/':'index.html','/app.js':'app.js','/style.css':'style.css'}
+        paths={'/':'index.html','/app.js':'app.js','/sheet.js':'sheet.js','/style.css':'style.css'}
         if self.path not in paths: self.send(404,{'error':'Not found'}); return
         p=ROOT/'public'/paths[self.path]; self.send_response(200); self.send_header('Content-Type',{'html':'text/html','js':'text/javascript','css':'text/css'}[p.suffix[1:]]+'; charset=utf-8'); self.send_header('X-Content-Type-Options','nosniff'); self.send_header('Content-Security-Policy',"default-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'"); self.end_headers(); self.wfile.write(p.read_bytes())
     def do_POST(self):
@@ -111,7 +121,10 @@ class Handler(BaseHTTPRequestHandler):
                     identities=json.loads(c.execute("SELECT value FROM settings WHERE key='history_worker_ids'").fetchone()[0])
                     months=combined_months(months,identities)
                     holidays={**historical_special_days(),**dict(c.execute('SELECT day,name FROM holidays').fetchall())}
-                    roster=generate(body['month'],workers,months,holidays)
+                    first_day=body.get('firstDay')
+                    if first_day:
+                        validate_cells(first_day,workers)
+                    roster=generate(body['month'],workers,months,holidays,first_day)
                     validate(roster,body['month'],workers,holidays)
                     self.send(200,{'roster':roster}); return
                 elif self.path=='/api/month':

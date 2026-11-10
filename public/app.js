@@ -15,6 +15,7 @@ function render(){
  const filter=$('search').value.trim().toLowerCase();const workers=Object.fromEntries(state.workers.map(w=>[w.id,w]));
  const filtered=(rows||[]).filter(r=>!filter||[...r.day,...r.night].some(id=>workers[id]?.name.toLowerCase().includes(filter)));
  $('roster').innerHTML=filtered.map(row=>{const date=new Date(row.date+'T12:00:00');const holiday=holidayName(row.date);const weekend=[5,6].includes(date.getDay())||!!holiday;return `<tr class="${weekend?'weekend':''}"><td><div class="day-date"><span class="date-number">${date.getDate().toString().padStart(2,'0')}</span><span class="weekday">${date.toLocaleDateString('en-GB',{weekday:'long'})}<small>${holiday?escape(holiday):weekend?'Weekend':'Weekday'}</small></span></div></td>${['day','night'].map(key=>`<td><div class="chips">${row[key].map(id=>`<span class="chip ${key==='night'?'evening':''}">${escape(workers[id]?.name||'Unknown')}</span>`).join('')||'<span class="empty-shift">Unassigned</span>'}</div></td>`).join('')}${state.admin?`<td><button class="button edit-shift" data-date="${row.date}" aria-label="Edit ${row.date}">Edit</button></td>`:''}</tr>`}).join('');
+ renderSheet(filtered);
  $('rowCount').textContent=rows?`${filtered.length} of ${rows.length} days${filter?' · Filtered view':''}`:'No schedule yet';
  $('teamGrid').innerHTML=state.workers.map(w=>`<article class="person"><div class="avatar">${escape(w.name[0])}</div><h3>${escape(w.name)}</h3><p>${w.kind==='day'?'☀ Day shifts only':'☀ Day & ☾ evening shifts'}</p><p>${w.friday?'Friday & holiday daytime eligible':'No Friday / holiday daytime shifts'}</p>${state.admin?`<button class="button edit-worker" data-id="${w.id}">Edit member →</button>`:''}</article>`).join('');
  renderHolidays();renderHistory();
@@ -80,3 +81,25 @@ function renderHistory(){
  $('comparisonRows').innerHTML=historyData.differences.map(r=>`<tr><td>${r.date}</td><td>${escape(r.text_only.join(', ')||'—')}</td><td>${escape(r.excel_only.join(', ')||'—')}</td></tr>`).join('');
 }
 $('historyMonth').onchange=e=>{historyMonth=e.target.value;renderHistory();};$('historySource').onchange=renderHistory;$('printHistory').onclick=()=>window.print();
+function renderSheet(rows){
+ $('sheetPanel').hidden=!state.admin;$('simpleRoster').hidden=state.admin;
+ if(!state.admin)return;
+ const workers=Object.fromEntries(state.workers.map(w=>[w.id,w]));
+ $('stateLegend').innerHTML=Object.entries(ShiftSheet.states).map(([key,label])=>`<span class="state-key"><i class="cell-${key}"></i>${escape(label)}</span>`).join('');
+ $('sheetHead').innerHTML='<tr><th>Day</th><th>Date</th>'+state.workers.map((_,i)=>`<th>Engineer slot ${i+1}</th>`).join('')+'</tr>';
+ $('sheetBody').innerHTML=(rows||[]).map(row=>{const d=new Date(row.date+'T12:00:00'),calendar=rotationDay(row.date)?'calendar-friday':d.getDay()===6?'calendar-saturday':'';return `<tr><th class="${calendar}">${d.toLocaleDateString('en-GB',{weekday:'long'})}</th><th class="${calendar}" title="${escape(holidayName(row.date)||'')}">${d.toLocaleDateString('en-GB')}</th>${ShiftSheet.cells(row,state.workers).map((c,i)=>`<td class="cell-${c.state}"><button class="sheet-cell" data-date="${row.date}" data-slot="${i}" aria-label="Edit ${row.date}, slot ${i+1}: ${escape(workers[c.workerId]?.name||'Unknown')}"><strong>${escape(workers[c.workerId]?.name||'Unknown')}</strong><small>${c.shift==='night'?'17:30–23:30':'09:00–17:30'}</small>${c.state!=='working'?`<span>${escape(ShiftSheet.states[c.state])}</span>`:''}</button></td>`).join('')}</tr>`}).join('');
+ document.querySelectorAll('.sheet-cell').forEach(b=>b.onclick=()=>editSheetCell(b.dataset.date,Number(b.dataset.slot)));
+}
+function editSheetCell(date,index){
+ const row=rosterForMonth().find(r=>r.date===date),items=ShiftSheet.cells(row,state.workers),current=items[index];
+ openModal('Edit cell · '+date,`<label class="field">Engineer<select name="workerId">${state.workers.map(w=>`<option value="${w.id}" ${w.id===current.workerId?'selected':''}>${escape(w.name)}</option>`).join('')}</select></label><label class="field">Shift<select name="shift"><option value="day" ${current.shift==='day'?'selected':''}>Day · 09:00–17:30</option><option value="night" ${current.shift==='night'?'selected':''}>Evening · 17:30–23:30</option></select></label><label class="field">State<select name="state">${Object.entries(ShiftSheet.states).map(([key,label])=>`<option value="${key}" ${key===current.state?'selected':''}>${escape(label)}</option>`).join('')}</select></label><p class="help">Selecting an engineer already in this row swaps their position with this slot. Non-working states remove the engineer from active coverage. Working cells have no color fill. This change applies to this date only.</p>`,async form=>{
+  const id=Number(form.get('workerId')),other=items.findIndex(c=>c.workerId===id);if(other!==index)items[other].workerId=current.workerId;
+  items[index]={workerId:id,state:form.get('state'),shift:form.get('shift')};
+  const next=ShiftSheet.fromCells(date,items);ShiftSheet.validate(next,state.workers);
+  for(const wid of next.night)if(state.workers.find(w=>w.id===wid).kind==='day')throw Error('Day-only employees cannot work evening shifts.');
+  if(rotationDay(date)&&next.day.some(id=>!state.workers.find(w=>w.id===id).friday))throw Error('Selected engineer cannot work Friday / holiday daytime.');
+  const roster=rosterForMonth().map(r=>r.date===date?next:r);if(drafts[month])drafts[month]=roster;else await api('month',{month,roster});notify('Cell saved.');
+ });
+}
+$('planFromFirst').onclick=()=>{const first=rosterForMonth()?.[0];if(!first){notify('Create a month and configure its first day first.');return;}if(first.night.length!==1){notify('Configure exactly one working evening engineer on the first day.');return;}
+ openModal('Plan month from the first day?',`<p class="help">Keep ${month}-01 exactly as configured and generate the remaining dates using the evening rotations, recovery, Friday/holiday eligibility and recorded history. This creates a replacement draft; the published month stays unchanged. Leave, training and illness on the first day do not automatically extend to later days.</p>`,async()=>{const firstDay=ShiftSheet.fromCells(first.date,ShiftSheet.cells(first,state.workers));const result=await api('generate',{month,firstDay});const order=firstDay.cells.map(c=>state.workers.find(w=>w.id===c.workerId));drafts[month]=result.roster.map(r=>r.date===firstDay.date?firstDay:{...r,cells:ShiftSheet.cells(r,order)});notify('Month planned from your first day. Review and publish the draft.');},'Plan month');};

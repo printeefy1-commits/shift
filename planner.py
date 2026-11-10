@@ -6,19 +6,22 @@ from holidays import holiday_name, is_rotation_day, HOLIDAY_ROTATION_START
 
 ONE = timedelta(days=1)
 
-def generate(month, workers, months, holidays=None):
+def generate(month, workers, months, holidays=None, first_day=None):
     try:
         first = date.fromisoformat(month + '-01')
     except (ValueError, TypeError):
         raise ValueError('Choose a valid month.')
     last = first.replace(day=calendar.monthrange(first.year, first.month)[1])
+    if first_day:
+        if first_day.get('date')!=first.isoformat() or len(first_day.get('night',[]))!=1:raise ValueError('The first day needs exactly one evening engineer.')
     previous = (first - ONE).strftime('%Y-%m')
-    if previous not in months:
+    has_previous=previous in months
+    if not has_previous and not first_day:
         raise ValueError('Plan the previous month first so rotation and rest days can continue correctly.')
-    boundary = {r['date']: r for r in months[previous]}
+    boundary = {r['date']: r for r in months.get(previous,[])}
     for offset in range(1, 8):
         row = boundary.get((first - timedelta(days=offset)).isoformat())
-        if not row or len(row.get('night', [])) != 1:
+        if has_previous and (not row or len(row.get('night', [])) != 1):
             raise ValueError('Complete the final seven evening assignments of the previous month before generating.')
     pool = [w['id'] for w in workers if w['kind'] == 'both']
     ids = [w['id'] for w in workers]
@@ -46,15 +49,18 @@ def generate(month, workers, months, holidays=None):
         relevant = cursor + timedelta(days=length + 1) >= first
         if len(known) > 1 and relevant:
             raise ValueError(f'The existing rotation starting {cursor} has different evening workers. Resolve it before generating.')
+        seeded=bool(first_day and first in dates)
+        if seeded:known={first_day['night'][0]}
         owner = next(iter(known)) if len(known) == 1 else None
-        if owner is not None and reserved and owner not in reserved and relevant:
+        if owner is not None and reserved and owner not in reserved and relevant and not seeded:
             raise ValueError(f'The Saturday day shift before {cursor} does not match its Sunday evening rotation. Resolve it first.')
+        if first_day and first.weekday()==5 and cursor==first+ONE and len(first_day.get('day',[]))==1 and not holiday_name(first,holidays):owner=first_day['day'][0]
         if owner is None and len(reserved) == 1:
             owner = reserved[0]
         if owner is not None:
             if relevant and owner not in pool:
                 raise ValueError(f'The rotation starting {cursor} belongs to a day-only employee. Update the existing schedule first.')
-            if relevant and owner == previous_owner:
+            if relevant and owner == previous_owner and (has_previous or not seeded):
                 raise ValueError(f'The rotation starting {cursor} conflicts with recovery days from the previous rotation.')
         else:
             candidates = [i for i in pool if i != previous_owner]
@@ -72,6 +78,10 @@ def generate(month, workers, months, holidays=None):
         rest = set()
         if offset in (0, 1): rest.add(blocks[sun - timedelta(days=4)])
         if offset in (3, 4): rest.add(blocks[sun])
+        if not has_previous:
+            rest={i for i in rest if first_day and any(c.get('workerId')==i and c.get('state')=='recovery' for c in first_day.get('cells',[]))}
+        if first_day and first.weekday() in (6,2) and d<=first+ONE:
+            rest.update(c['workerId'] for c in first_day.get('cells',[]) if c['state']=='recovery')
         available = [i for i in ids if i != night and i not in rest]
         if is_rotation_day(d,holidays):
             available = [i for i in available if i in friday_pool]
@@ -84,5 +94,8 @@ def generate(month, workers, months, holidays=None):
                 raise ValueError(f'The Saturday assignment on {d} conflicts with an evening shift or recovery day.')
         else:
             day = available
-        roster.append({'date': d.isoformat(), 'day': day, 'night': [night]})
+        if first_day and d==first:
+            if set(first_day['day']) & (rest|{night}):raise ValueError('The first day conflicts with an evening shift or recovery from the previous month.')
+            roster.append(first_day)
+        else:roster.append({'date': d.isoformat(), 'day': day, 'night': [night], 'recovery': sorted(rest)})
     return roster

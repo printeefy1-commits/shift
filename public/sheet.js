@@ -1,0 +1,8 @@
+window.ShiftSheet=(()=>{
+ const states={working:'Working',recovery:'Récupération',training:'Formation',leave:'Congé',sick:'Maladie + vaccin',fridayHoliday:'Vendredi + jour férié',saturday:'Samedi',telework:'Télétravail',unscheduled:'Not scheduled'};
+ const active=s=>['working','telework','fridayHoliday','saturday'].includes(s);
+ function cells(row,workers){const saved=row.cells||[],seen=new Set(saved.map(c=>c.workerId));if(saved.length)return [...saved,...workers.filter(w=>!seen.has(w.id)).map(w=>({workerId:w.id,state:'unscheduled',shift:'day'}))];const order=[...row.night,...row.day,...workers.map(w=>w.id)].filter((id,i,a)=>a.indexOf(id)===i);return order.map(id=>({workerId:id,state:row.night.includes(id)||row.day.includes(id)?'working':row.recovery?.includes(id)?'recovery':'unscheduled',shift:row.night.includes(id)?'night':'day'}));}
+ function fromCells(date,items){return{date,day:items.filter(c=>active(c.state)&&c.shift==='day').map(c=>c.workerId),night:items.filter(c=>active(c.state)&&c.shift==='night').map(c=>c.workerId),cells:items.map(c=>({...c}))};}
+ function validate(row,workers){if(!row.cells)return;const ids=new Set(workers.map(w=>w.id));if(!Array.isArray(row.cells)||row.cells.length>workers.length||new Set(row.cells.map(c=>c.workerId)).size!==row.cells.length||row.cells.some(c=>!ids.has(c.workerId)||!Object.hasOwn(states,c.state)||!['day','night'].includes(c.shift)))throw Error('Each engineer must appear once, with a valid state and shift.');const projected=fromCells(row.date,row.cells);for(const key of ['day','night'])if(JSON.stringify([...projected[key]].sort())!==JSON.stringify([...row[key]].sort()))throw Error('Engineer states do not match the shift assignments.');}
+ return{states,active,cells,fromCells,validate};
+})();
