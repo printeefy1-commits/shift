@@ -21,6 +21,10 @@ class LocalPlannerTests(unittest.TestCase):
         result=subprocess.run(['node','tests/local_password.cjs'],cwd=ROOT,capture_output=True,text=True,check=True)
         self.assertIn('PASS',result.stdout)
 
+    def test_absence_storage_backup_and_reload(self):
+        result=subprocess.run(['node','tests/absence_storage.cjs'],cwd=ROOT,capture_output=True,text=True,check=True)
+        self.assertIn('PASS',result.stdout)
+
     def test_local_storage_authentication_backup_and_rollback(self):
         script=r"""
 const vm=require('vm'),fs=require('fs'),assert=require('assert');global.window={};global.crypto=require('crypto').webcrypto;const saved={};let quota=false;global.localStorage={getItem:k=>saved[k]||null,setItem:(k,v)=>{if(quota)throw Error('quota');saved[k]=v;}};

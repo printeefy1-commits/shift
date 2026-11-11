@@ -77,6 +77,16 @@ def validate_cells(row,workers):
         projected={c['workerId'] for c in cells if c['shift']==key and c['state'] in ('working','telework','fridayHoliday','saturday')}
         if projected!=set(row[key]):raise ValueError('Engineer states do not match shift assignments.')
 
+def validate_absences(absences,workers):
+    if not isinstance(absences,list) or len(absences)>2000:raise ValueError('Invalid absence list.')
+    ids={w['id'] for w in workers}
+    for i,a in enumerate(absences):
+        if not isinstance(a,dict) or type(a.get('workerId'))!=int or a['workerId'] not in ids or a.get('state') not in ('training','leave','sick'):raise ValueError('Choose an engineer and absence type.')
+        for key in ('start','end'):
+            if not isinstance(a.get(key),str) or date.fromisoformat(a[key]).isoformat()!=a[key]:raise ValueError('Choose valid absence dates.')
+        if a['end']<a['start']:raise ValueError('Absence end must follow its start.')
+        if any(b['workerId']==a['workerId'] and a['start']<=b['end'] and b['start']<=a['end'] for b in absences[:i]):raise ValueError('Absences for the same engineer must not overlap.')
+
 class Handler(BaseHTTPRequestHandler):
     def send(self,status,data):
         raw=json.dumps(data).encode(); self.send_response(status); self.send_header('Content-Type','application/json'); self.send_header('Cache-Control','no-store'); self.send_header('X-Content-Type-Options','nosniff'); self.end_headers(); self.wfile.write(raw)
@@ -90,7 +100,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send(200,ARCHIVE); return
         if self.path=='/api/state':
             with connect() as c:
-                self.send(200,{'holidays':dict(c.execute('SELECT day,name FROM holidays').fetchall()),'fixedHolidays':FIXED,'columnTimes':json.loads((c.execute("SELECT value FROM settings WHERE key='columnTimes'").fetchone() or ['[]'])[0]),'historySummary':ARCHIVE['metadata'],'identities':json.loads(c.execute("SELECT value FROM settings WHERE key='history_worker_ids'").fetchone()[0]),'admin':self.authenticated(),'adminConfigured':bool(c.execute('SELECT 1 FROM settings WHERE key="password"').fetchone()),'workers':[dict(r) for r in c.execute('SELECT * FROM workers')], 'months':{r['month']:json.loads(r['roster']) for r in c.execute('SELECT * FROM months')}})
+                self.send(200,{'holidays':dict(c.execute('SELECT day,name FROM holidays').fetchall()),'fixedHolidays':FIXED,'absences':json.loads((c.execute("SELECT value FROM settings WHERE key='absences'").fetchone() or ['[]'])[0]),'columnTimes':json.loads((c.execute("SELECT value FROM settings WHERE key='columnTimes'").fetchone() or ['[]'])[0]),'historySummary':ARCHIVE['metadata'],'identities':json.loads(c.execute("SELECT value FROM settings WHERE key='history_worker_ids'").fetchone()[0]),'admin':self.authenticated(),'adminConfigured':bool(c.execute('SELECT 1 FROM settings WHERE key="password"').fetchone()),'workers':[dict(r) for r in c.execute('SELECT * FROM workers')], 'months':{r['month']:json.loads(r['roster']) for r in c.execute('SELECT * FROM months')}})
             return
         paths={'/':'index.html','/app.js':'app.js','/sheet.js':'sheet.js','/rotation.js':'rotation.js','/style.css':'style.css'}
         if self.path not in paths: self.send(404,{'error':'Not found'}); return
@@ -139,6 +149,9 @@ class Handler(BaseHTTPRequestHandler):
                     self.send(200,{'roster':roster}); return
                 elif self.path=='/api/month':
                     workers=[dict(r) for r in c.execute('SELECT * FROM workers')]; month=body['month']; validate(body['roster'],month,workers,dict(c.execute('SELECT day,name FROM holidays').fetchall()))
+                    absences=json.loads((c.execute("SELECT value FROM settings WHERE key='absences'").fetchone() or ['[]'])[0])
+                    for row in body['roster']:
+                        if any(a['start']<=row['date']<=a['end'] and a['workerId'] in row['day']+row['night'] for a in absences):raise ValueError('An absent engineer cannot work on '+row['date']+'.')
                     c.execute('INSERT OR REPLACE INTO months VALUES (?,?)',(month,json.dumps(body['roster'])))
                 elif self.path=='/api/holiday':
                     day=body['date']; date.fromisoformat(day)
@@ -148,6 +161,10 @@ class Handler(BaseHTTPRequestHandler):
                     else:
                         if not name or len(name)>80: raise ValueError('Enter a holiday name (up to 80 characters).')
                         c.execute('INSERT OR REPLACE INTO holidays VALUES (?,?)',(day,name))
+                elif self.path=='/api/absences':
+                    absences=body.get('absences');workers=[dict(r) for r in c.execute('SELECT * FROM workers')]
+                    validate_absences(absences,workers)
+                    c.execute("INSERT OR REPLACE INTO settings VALUES ('absences',?)",(json.dumps(absences),))
                 elif self.path=='/api/preferences':
                     import re
                     times=body.get('columnTimes')

@@ -117,8 +117,8 @@ Published history and other months are preserved.
   eligible day/evening Friday selection takes that block instead, exchanging
   its place in the next week's queue with the regular candidate.
 - D records Sunday–Monday recovery after four evenings, followed by daytime
-  Tuesday–Thursday. The engineer then enters the daytime queue: **one week
-  with 5 rotating engineers, two with 6, three with 7** (count minus four).
+  Tuesday–Thursday. The engineer then enters the daytime queue: **zero weeks with 4 available rotating engineers, one week
+  with 5, two with 6, three with 7** (count minus four).
   The daytime stage is displayed as one shared E/F/G column after D,
   containing all engineers in that stage. With six rotating engineers, both
   engineers appear together in F and each stays there for two weeks. The
@@ -145,3 +145,37 @@ remain intact; use **Plan weekly rotation** to review their initial roles
 before making a cycle change. The older Python/browser fairness generator
 remains available through the existing API for compatibility; the application's
 planning buttons use the same weekly-rule planner in both editions.
+
+
+## Long absences and monthly continuity
+
+Use **Absences / return dates** to record an engineer, Formation / Congé /
+Maladie, first absent date and last absent date (inclusive). The next day is
+that engineer's automatic return to the day/evening team; shift eligibility is
+never changed to day-only. Overlapping periods for one engineer are rejected.
+The same feature also records daytime-only absences without changing the
+rotating-team count.
+
+Planning uses the engineers actually available on each date. Six engineers
+with one away for six weeks use the five-engineer cycle for that period;
+after the return, the six-engineer cycle resumes. Four available engineers
+use the exact A/B/C/D example, without a daytime waiting stage: D's Saturday
+prepares A's next Sunday–Tuesday nights. A fifth adds one daytime week, a
+sixth two, a seventh three. When an engineer leaves a core role, the oldest
+available engineer from the daytime queue fills it; other roles stay in place
+where possible. Returning engineers join the newest daytime position, then
+progress to both evening blocks. Actual completed evenings and Friday
+assignments determine recovery through these changes.
+
+Saved schedules are not silently rewritten when an absence is recorded. Use
+**Plan weekly rotation**, set **Plan from date** to the affected date, review
+the draft and publish it. Earlier dates remain unchanged. Publication rejects
+an assignment to an engineer recorded absent on that date. At least four
+rotating engineers must be available; a smaller team produces a clear error.
+
+**Plan next month** inherits the previous published/draft week's roles,
+remaining daytime queue and next rotation. Initial roles are locked when
+continuation exists; the month boundary never restarts the cycle. An explicit
+cycle switch still uses the drag confirmation. Absence dates and weekly
+metadata survive reloads, JSON backups and read-only exports; older backups
+without absences continue to restore.

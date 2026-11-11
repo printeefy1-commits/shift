@@ -14,6 +14,10 @@ class SpreadsheetTests(unittest.TestCase):
  def test_weekly_column_rules_and_dynamic_daytime_queue(self):
   p=subprocess.run(['node','tests/weekly_rotation.cjs'],cwd=ROOT,capture_output=True,text=True,check=True)
   self.assertIn('PASS',p.stdout)
+ @unittest.skipUnless(shutil.which('node'),'Node required for availability planner')
+ def test_four_engineer_example_and_long_absences(self):
+  p=subprocess.run(['node','tests/absence_rotation.cjs'],cwd=ROOT,capture_output=True,text=True,check=True)
+  self.assertIn('PASS',p.stdout)
  def test_first_day_preserved_and_rest_follows_seed(self):
   rows=generate('2026-12',self.workers,self.months,historical_special_days(),self.first)
   self.assertEqual(rows[0],self.first)

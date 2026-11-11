@@ -14,7 +14,7 @@ class ShiftTests(unittest.TestCase):
     def tearDownClass(cls): cls.http.shutdown();cls.http.server_close();cls.tmp.cleanup()
     def setUp(self):
         with server.connect() as c:
-            c.execute("DELETE FROM holidays");c.execute("DELETE FROM workers");c.execute("DELETE FROM months");c.execute("DELETE FROM settings WHERE key='initialized'")
+            c.execute("DELETE FROM settings WHERE key='absences'");c.execute("DELETE FROM holidays");c.execute("DELETE FROM workers");c.execute("DELETE FROM months");c.execute("DELETE FROM settings WHERE key='initialized'")
         server.initialize()
     def request(self,path,data=None,cookie=None):
         headers={'Content-Type':'application/json'}
@@ -33,6 +33,25 @@ class ShiftTests(unittest.TestCase):
         saved=json.load(self.request('/api/state'))
         self.assertEqual(saved['months']['2027-08'],rows)
         self.assertEqual(saved['months']['2026-11'],state['months']['2026-11'])
+
+    def test_absence_storage_validation_and_publication_guard(self):
+        before=json.load(self.request('/api/state'))
+        login=self.request('/api/login',{'username':'admin','password':'test-password-1234'});cookie=login.headers['Set-Cookie'].split(';')[0]
+        absences=[{'workerId':2,'state':'training','start':'2026-11-01','end':'2026-12-12'}]
+        with self.assertRaises(urllib.error.HTTPError) as e:self.request('/api/absences',{'absences':absences})
+        self.assertEqual(e.exception.code,401)
+        self.request('/api/absences',{'absences':absences},cookie)
+        saved=json.load(self.request('/api/state'))
+        self.assertEqual(saved['absences'],absences)
+        self.assertEqual(saved['months'],before['months'])
+        self.assertEqual(saved['workers'],before['workers'])
+        with self.assertRaises(urllib.error.HTTPError) as e:self.request('/api/month',{'month':'2026-11','roster':saved['months']['2026-11']},cookie)
+        self.assertEqual(e.exception.code,400)
+        for invalid in [absences+absences,[{**absences[0],'end':'2026-10-01'}],[{**absences[0],'start':'2026-11-31'}]]:
+            with self.assertRaises(urllib.error.HTTPError):self.request('/api/absences',{'absences':invalid},cookie)
+        self.assertEqual(json.load(self.request('/api/state'))['absences'],absences)
+        self.request('/api/absences',{'absences':[]},cookie)
+        self.assertEqual(json.load(self.request('/api/state'))['absences'],[])
 
     def test_history_read_only_api(self):
         archive=json.load(self.request('/api/history'))
