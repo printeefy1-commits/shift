@@ -69,13 +69,26 @@ function renderHistory(){
  $('comparisonRows').innerHTML=historyData.differences.map(r=>`<tr><td>${r.date}</td><td>${escape(r.text_only.join(', ')||'—')}</td><td>${escape(r.excel_only.join(', ')||'—')}</td></tr>`).join('');
 }
 $('historyMonth').onchange=e=>{historyMonth=e.target.value;renderHistory();};$('historySource').onchange=renderHistory;$('printHistory').onclick=()=>window.print();
+function sheetColumnGroups(){
+ const n=state.workers.filter(w=>w.kind==='both').length,weekly=rosterForMonth()?.some(r=>r.rotation);
+ if(!weekly||n<5)return state.workers.map((_,i)=>[i]);
+ return [...Array.from({length:4},(_,i)=>[i]),Array.from({length:n-4},(_,i)=>i+4),...state.workers.slice(n).map((_,i)=>[n+i])];
+}
 function renderSheet(rows){
  $('sheetPanel').hidden=!state.admin;$('simpleRoster').hidden=state.admin;
  if(!state.admin)return;
- const workers=Object.fromEntries(state.workers.map(w=>[w.id,w]));
+ const workers=Object.fromEntries(state.workers.map(w=>[w.id,w])),groups=sheetColumnGroups();
  $('stateLegend').innerHTML=Object.entries(ShiftSheet.states).map(([key,label])=>`<span class="state-key"><i class="cell-${key}"></i>${escape(label)}</span>`).join('');
- $('sheetHead').innerHTML='<tr><th>Day</th><th>Date</th>'+state.workers.map((_,i)=>`<th><button class="column-time" data-index="${i}" title="Edit column time">${String.fromCharCode(65+i)} · ${columnTime(i).start} to ${columnTime(i).end}</button></th>`).join('')+'</tr>';document.querySelectorAll('.column-time').forEach(b=>b.onclick=()=>editColumnTime(Number(b.dataset.index)));
- const derived=new Map(sheetRows().map(r=>[r.date,r]));$('sheetBody').innerHTML=(rows||[]).map(raw=>{const row=derived.get(raw.date)||raw;return row;}).map(row=>{const d=new Date(row.date+'T12:00:00'),calendar=rotationDay(row.date)?'calendar-friday':d.getDay()===6?'calendar-saturday':'';return `<tr class="${calendar}"><th class="${calendar}">${d.toLocaleDateString('en-GB',{weekday:'long'})}</th><th class="${calendar}" title="${escape(holidayName(row.date)||'')}">${d.toLocaleDateString('en-GB')}</th>${ShiftSheet.cells(row,state.workers).map((c,i)=>`<td class="cell-${c.state}"><button draggable="true" class="sheet-cell" data-date="${row.date}" data-slot="${i}" aria-label="Edit ${row.date}, slot ${i+1}: ${escape(workers[c.workerId]?.name||'Unknown')}"><strong title="${escape(workers[c.workerId]?.name||'Unknown')} · ${escape(ShiftSheet.states[c.state])}">${escape(workers[c.workerId]?.name||'Unknown')}</strong><small>${c.shift==='night'?'Evening':'Day'}</small>${c.state!=='working'?`<span>${escape(ShiftSheet.states[c.state])}</span>`:''}</button></td>`).join('')}</tr>`}).join('');
+ $('sheetHead').innerHTML='<tr><th>Day</th><th>Date</th>'+groups.map(slots=>{const i=slots.at(-1);return `<th colspan="${slots.length}"><button class="column-time" data-index="${i}" title="Edit column time">${String.fromCharCode(65+i)} · ${columnTime(i).start} to ${columnTime(i).end}${slots.length>1?` · ${slots.length} weeks`:''}</button></th>`;}).join('')+'</tr>';document.querySelectorAll('.column-time').forEach(b=>b.onclick=()=>editColumnTime(Number(b.dataset.index)));
+ const derived=new Map(sheetRows().map(r=>[r.date,r]));
+ $('sheetBody').innerHTML=(rows||[]).map(raw=>{
+  const row=derived.get(raw.date)||raw,d=new Date(row.date+'T12:00:00'),weekend=[5,6].includes(d.getDay()),calendar=rotationDay(row.date)?'calendar-friday':d.getDay()===6?'calendar-saturday':'',items=ShiftSheet.cells(row,state.workers);
+  return `<tr class="${calendar}"><th class="${calendar}">${d.toLocaleDateString('en-GB',{weekday:'long'})}</th><th class="${calendar}" title="${escape(holidayName(row.date)||'')}">${d.toLocaleDateString('en-GB')}</th>${groups.map(slots=>{
+   const visible=slots.filter(i=>!weekend||ShiftSheet.active(items[i].state));
+   const content=visible.map(i=>{const c=items[i],name=escape(workers[c.workerId]?.name||'Unknown');return `<button draggable="true" class="sheet-cell cell-${c.state}" data-date="${row.date}" data-slot="${i}" aria-label="Edit ${row.date}, slot ${i+1}: ${name}"><strong title="${name} · ${escape(ShiftSheet.states[c.state])}">${name}</strong><small>${c.shift==='night'?'Evening':'Day'}</small>${c.state!=='working'?`<span>${escape(ShiftSheet.states[c.state])}</span>`:''}</button>`;}).join('');
+   return `<td colspan="${slots.length}" class="${!visible.length?'weekend-empty':slots.length>1?'daytime-pool':'cell-'+items[visible[0]].state}"${slots.length>1?' data-stage="'+String.fromCharCode(65+slots.at(-1))+'"':''}>${slots.length>1?'<div class="pool-engineers">'+content+'</div>':content}</td>`;
+  }).join('')}</tr>`;
+ }).join('');
  document.querySelectorAll('.sheet-cell').forEach(b=>{
   b.onclick=()=>editSheetCell(b.dataset.date,Number(b.dataset.slot));
   b.ondragstart=e=>{e.dataTransfer.setData('application/x-shift-cell',JSON.stringify({date:b.dataset.date,slot:Number(b.dataset.slot)}));e.dataTransfer.effectAllowed='move';b.classList.add('dragging');};

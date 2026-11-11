@@ -119,9 +119,11 @@ Published history and other months are preserved.
 - D records Sunday–Monday recovery after four evenings, followed by daytime
   Tuesday–Thursday. The engineer then enters the daytime queue: **one week
   with 5 rotating engineers, two with 6, three with 7** (count minus four).
-  Queue positions are displayed after D, from the newest to the oldest; the
-  oldest position, E/F/G respectively, proceeds to Saturday daytime and A's
-  three nights. Thus the two F-stage engineers have separate visible cells.
+  The daytime stage is displayed as one shared E/F/G column after D,
+  containing all engineers in that stage. With six rotating engineers, both
+  engineers appear together in F and each stays there for two weeks. The
+  oldest proceeds to Saturday daytime and A's three nights. Friday/Saturday
+  rows display only working engineers; inactive cells are blank and white.
 - Daytime-only engineers occupy the final columns (the final three with the
   supplied team). Yougo participates in Friday/holiday coverage; Sid Ali and
   Lamine retain their ineligible setting. Holidays choose the next available

@@ -36,6 +36,9 @@ Recovery is two days after each actual evening block.
 Phone numbers and full names are editable in Team members.
 Choose Plan weekly rotation, review the starting roles and select each Friday.
 After D, daytime lasts 1 week with 5 rotating engineers, 2 with 6, or 3 with 7.
+The shared E/F/G column shows all engineers in that stage together.
+With 6 rotating engineers, each stays visibly in F for 2 weeks.
+Friday/Saturday show only working engineers; inactive cells are blank/white.
 Then Saturday daytime prepares the Sunday-Tuesday evening block.
 Friday recovery is the following Sunday. Yougo is eligible for Friday; when
 he works Friday, B's candidate keeps the next Wednesday-Saturday night turn.
