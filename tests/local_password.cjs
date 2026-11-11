@@ -1,0 +1,37 @@
+// Exercise upgrades using the same persisted storage as a pre-update local copy.
+const vm=require('vm'),fs=require('fs'),assert=require('node:assert/strict');
+const html=fs.readFileSync('local/index.html','utf8');
+const config=JSON.parse(html.match(/window.LOCAL_CONFIG=(.*?);<\/script>/)[1]);
+const saved={};
+const context=vm.createContext({window:{LOCAL_CONFIG:config,LOCAL_ARCHIVE:JSON.parse(fs.readFileSync('resources/history.json','utf8'))},crypto:require('crypto').webcrypto,TextEncoder,localStorage:{getItem:k=>saved[k]||null,setItem:(k,v)=>saved[k]=v}});
+vm.runInContext(fs.readFileSync('local/engine.js','utf8'),context);
+const load=()=>{vm.runInContext(fs.readFileSync('local/storage.js','utf8'),context);return context.window.LocalShift;};
+const read=()=>JSON.parse(saved['shift-local-v1']);
+(async()=>{
+ let local=load();
+ assert.equal((await local.api('state')).passwordRequired,false);
+ await assert.rejects(local.api('worker',{name:'Blocked'}));
+ await local.api('login',{});
+ const original=JSON.stringify(local.exportData().data);
+ await local.api('setup',{password:'LocalPassword123!'});
+ const legacy=read();delete legacy.passwordRequired;
+ saved['shift-local-v1']=JSON.stringify(legacy);
+ local=load();await local.api('login',{});
+ assert.equal(JSON.stringify(local.exportData().data),original);
+ assert.deepEqual(read().password,legacy.password);
+ await local.api('enablePassword',{});
+ local=load();
+ assert.equal((await local.api('state')).passwordRequired,true);
+ await assert.rejects(local.api('login',{}));
+ await assert.rejects(local.api('login',{username:'admin',password:'wrong'}));
+ await local.api('login',{username:'admin',password:'LocalPassword123!'});
+ local.restore(local.exportData());
+ assert.equal(read().passwordRequired,true);
+ assert.deepEqual(read().password,legacy.password);
+ assert.equal(JSON.stringify(local.exportData().data),original);
+ context.window.LOCAL_CONFIG=local.shared();
+ assert.equal(context.window.LOCAL_CONFIG.seed.password,undefined);
+ local=load();await assert.rejects(local.api('login',{}));
+ await assert.rejects(local.api('enablePassword',{}));
+ console.log('PASS');
+})().catch(e=>{console.error(e);process.exitCode=1;});

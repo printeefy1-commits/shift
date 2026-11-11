@@ -2,8 +2,9 @@ SHIFT — FULL LOCAL EDITION
 
 1. Extract the ZIP into a folder.
 2. Double-click index.html. Use current Chrome, Edge, Firefox or Safari.
-3. Click Set up administrator and choose a password of at least 12 characters.
-4. Sign in as admin to manage employees, holidays and schedules.
+3. Click Admin sign in to edit immediately; no password is requested for now.
+4. To restore the password prompt, click Enable password protection after signing
+   in. An existing password is retained; otherwise choose at least 12 characters.
 
 No Python, installation, internet connection or local server is required.
 
@@ -12,8 +13,8 @@ at the same location and use the same browser/profile. Browser handling of
 file storage varies; clearing browsing data, private mode, moving the file
 or switching browsers can lose access to your saved data. Export JSON backups
 regularly and before moving/updating the application. Restore a backup after
-creating your local administrator in the new browser. Imports replace local
-schedules; they preserve the local password. Passwords are not in backups.
+signing in as administrator in the new browser. Imports replace local
+schedules; they preserve the local password and protection setting. Passwords are not in backups.
 If you forget the local password, use a backed-up JSON file in a fresh browser
 profile / fresh local copy and create a new local administrator before restoring.
 
@@ -35,5 +36,7 @@ Recovery is two days after each actual evening block.
 Phone numbers and full names are editable in Team members.
 Configure day one, then choose Plan month from first day to generate a draft.
 Review it and publish/save. Leave/training/illness apply only to that date.
-Export a backup before replacing this HTML file to keep your existing data.
+Export a backup before updating. Replace index.html at the SAME location and
+use the SAME browser/profile to retain existing schedules and data. The storage
+key is unchanged. Existing password hashes are kept while the prompt is off.
 Print / PDF uses your browser print dialog (choose Save as PDF).

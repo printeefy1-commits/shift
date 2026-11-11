@@ -17,6 +17,10 @@ class LocalPlannerTests(unittest.TestCase):
         actual=json.loads(proc.stdout)
         for key in keys:
             expected=generate(key,workers,months,holidays);self.assertEqual(actual[key],expected,key);months[key]=expected
+    def test_passwordless_upgrade_preserves_data_and_can_reenable_password(self):
+        result=subprocess.run(['node','tests/local_password.cjs'],cwd=ROOT,capture_output=True,text=True,check=True)
+        self.assertIn('PASS',result.stdout)
+
     def test_local_storage_authentication_backup_and_rollback(self):
         script=r"""
 const vm=require('vm'),fs=require('fs'),assert=require('assert');global.window={};global.crypto=require('crypto').webcrypto;const saved={};let quota=false;global.localStorage={getItem:k=>saved[k]||null,setItem:(k,v)=>{if(quota)throw Error('quota');saved[k]=v;}};
