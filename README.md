@@ -37,10 +37,10 @@ For shared production access, run behind an HTTPS reverse proxy with a persisten
 
 - Browse months and filter by employee; published edits appear for other viewers on refresh or within 30 seconds.
 - Sign in to edit daily assignments, add / rename employees, or change shift eligibility.
-- Use **Plan next month** to generate a private draft, review or edit its assignments, then **Publish schedule**. Alternatively, create a blank month for manual planning. Drafts are held in the current browser tab until published; leaving or reloading warns about unsaved drafts.
+- Use **Plan next month** to review the weekly column roles and select Friday coverage, create a private draft, review or edit its assignments, then **Publish schedule**. Alternatively, create a blank month for manual planning. Drafts are held in the current browser tab until published; leaving or reloading warns about unsaved drafts.
 - Use **Print / PDF**, then choose your browser’s **Save as PDF** destination. This uses the filtered view; clear the search to export the full month.
 
-## Automatic planning rules
+## Legacy API planning rules
 
 - Rotation A: Saturday daytime, then Sunday / Monday / Tuesday evening, then Wednesday / Thursday recovery.
 - Rotation B: Wednesday / Thursday / Friday / Saturday evening, then Sunday / Monday recovery.
@@ -84,7 +84,7 @@ After local administrator sign-in, the schedule becomes a spreadsheet: one row p
 
 States match the supplied Excel legend: Recovery (cyan), Training (purple), Leave (light green), Illness/vaccination (green), Friday/holiday (orange), Saturday (yellow), Telework (red). Working cells are unfilled white. Friday/holiday and Saturday date headers are highlighted automatically. Non-working states remove the engineer from active coverage; telework remains active coverage. Unspecified absences from older schedules are labeled Not scheduled rather than guessed as leave.
 
-To seed a month, create/select it and configure the first day's cells, including exactly one working evening engineer. Click **Plan month from first day**. The first date is preserved exactly; the remaining dates are generated as a private draft with rotation, recovery and eligibility checks. If the previous month exists its recovery constraints still apply. A new standalone month can start from a configured first day even without prior history. Review, then publish/save. Leave, illness and training apply only to the specified date, with no implied multi-day duration. Old backups remain compatible; new backups and shared HTML snapshots retain cell states.
+To plan a month, choose **Plan weekly rotation**, review the starting Sunday roles and select each Friday's engineer. Rules 1–8 determine the rotating columns and recovery; the daytime stage after D lasts the number of day/evening engineers minus four weeks. Review the draft, then publish. Leave, illness and training can be edited for a specific date. Old backups remain compatible; new backups and shared HTML snapshots retain cell states and weekly rotation metadata.
 
 ## Compact planning, contacts and switches
 
@@ -94,6 +94,52 @@ Column headings show editable time ranges instead of slot numbers. Click a headi
 
 Friday/holiday rows are orange and Saturdays yellow across the grid. Recovery, leave, training, illness and telework retain their own state colors within those rows. Recovery is computed for the next two calendar days after the end of an actual consecutive evening block, including blocks interrupted by a manual switch. Conflicting evening assignments are rejected; daytime coverage is removed for recovery.
 
-**Switch engineers** asks whether to swap just the selected pair from a chosen date onward, or to replan all remaining turns from that date. Both paths create a review draft. Editing a cell's engineer also offers a date-only swap. Earlier dates remain unchanged; current eligibility and recovery constraints apply. Midmonth replanning retains the configured anchor day and prior dates.
+**Switch engineers**, or drag an engineer onto another on the same date, to choose a one-shift swap that preserves other turns or a change to the remaining weekly rotation cycle. Both choices create a review draft. Earlier dates remain unchanged; current eligibility and recovery constraints apply. Use the cycle option only after the month has weekly rotation metadata.
 
 The sidebar now lists each engineer's full name and telephone number below Shift history, using the user-provided contact table. Contacts can be edited in Team members and are retained in local backups and shared copies. Older local data receives the initial contacts without overwriting values the administrator has already entered. The intentionally supplied directory is stored in `resources/contacts.json`; the history archive itself still excludes phone and identifier columns.
+
+
+## Weekly column rotation (rules 1–8)
+
+Use **Plan weekly rotation** (or **Plan next month**). Review the starting
+Sunday's roles and select the Friday engineer for each displayed week. The
+planner creates a private draft; only **Publish schedule** replaces saved data.
+Published history and other months are preserved.
+
+- A carries Sunday–Tuesday evenings (17:30–23:30), preceded by Saturday daytime.
+  That engineer rests Wednesday–Thursday in C; the next weekly stage is B.
+- B is the regular Friday / following four-night candidate. Friday coverage is
+  selected by the administrator. Friday daytime earns recovery the following
+  Sunday, with Saturday already off.
+- C works Monday–Tuesday daytime, then Wednesday–Saturday evenings in A.
+  If Yougo or another eligible daytime-only engineer works Friday, B's regular
+  candidate still takes the following Wednesday–Saturday block. A different
+  eligible day/evening Friday selection takes that block instead, exchanging
+  its place in the next week's queue with the regular candidate.
+- D records Sunday–Monday recovery after four evenings, followed by daytime
+  Tuesday–Thursday. The engineer then enters the daytime queue: **one week
+  with 5 rotating engineers, two with 6, three with 7** (count minus four).
+  Queue positions are displayed after D, from the newest to the oldest; the
+  oldest position, E/F/G respectively, proceeds to Saturday daytime and A's
+  three nights. Thus the two F-stage engineers have separate visible cells.
+- Daytime-only engineers occupy the final columns (the final three with the
+  supplied team). Yougo participates in Friday/holiday coverage; Sid Ali and
+  Lamine retain their ineligible setting. Holidays choose the next available
+  eligible engineer in the shared Friday/holiday rotation, with an optional
+  administrator override. Friday/evening and recovery conflicts are rejected.
+
+Drag an engineer onto another **on the same date**. Before any change, select:
+**only this shift** (all other dates and turns remain unchanged), or **change
+the rotation cycle** (recompute from that date using the exchanged weekly
+roles and the rule-8 daytime queue). Both choices create a review draft; cancel
+or discard leaves the published schedule unchanged. Daytime-only engineers
+cannot take evening turns or leave their reserved column group. A one-shift
+swap that would violate recovery is rejected instead of silently changing
+other dates. Earlier dates remain unchanged when replanning a cycle.
+
+Weekly queue metadata survives publication, reload, backups and read-only
+exports, and seeds the next month. Existing schedules without this metadata
+remain intact; use **Plan weekly rotation** to review their initial roles
+before making a cycle change. The older Python/browser fairness generator
+remains available through the existing API for compatibility; the application's
+planning buttons use the same weekly-rule planner in both editions.

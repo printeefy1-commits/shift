@@ -10,6 +10,10 @@ class SpreadsheetTests(unittest.TestCase):
   self.workers=[{'id':self.ids[n],'name':n,'kind':'day' if n in ['Sid Ali','Yougo','Lamine'] else 'both','friday':n not in ['Sid Ali','Lamine']} for n in NAMES]
   self.months=combined_months({},self.ids)
   self.first={'date':'2026-12-01','day':[4,5,6,7,8,9],'night':[2],'cells':[{'workerId':i,'state':'leave' if i==1 else 'recovery' if i==3 else 'working','shift':'night' if i==2 else 'day'} for i in range(1,10)]}
+ @unittest.skipUnless(shutil.which('node'),'Node required for weekly column rotation')
+ def test_weekly_column_rules_and_dynamic_daytime_queue(self):
+  p=subprocess.run(['node','tests/weekly_rotation.cjs'],cwd=ROOT,capture_output=True,text=True,check=True)
+  self.assertIn('PASS',p.stdout)
  def test_first_day_preserved_and_rest_follows_seed(self):
   rows=generate('2026-12',self.workers,self.months,historical_special_days(),self.first)
   self.assertEqual(rows[0],self.first)

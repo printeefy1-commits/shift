@@ -92,7 +92,7 @@ class Handler(BaseHTTPRequestHandler):
             with connect() as c:
                 self.send(200,{'holidays':dict(c.execute('SELECT day,name FROM holidays').fetchall()),'fixedHolidays':FIXED,'columnTimes':json.loads((c.execute("SELECT value FROM settings WHERE key='columnTimes'").fetchone() or ['[]'])[0]),'historySummary':ARCHIVE['metadata'],'identities':json.loads(c.execute("SELECT value FROM settings WHERE key='history_worker_ids'").fetchone()[0]),'admin':self.authenticated(),'adminConfigured':bool(c.execute('SELECT 1 FROM settings WHERE key="password"').fetchone()),'workers':[dict(r) for r in c.execute('SELECT * FROM workers')], 'months':{r['month']:json.loads(r['roster']) for r in c.execute('SELECT * FROM months')}})
             return
-        paths={'/':'index.html','/app.js':'app.js','/sheet.js':'sheet.js','/style.css':'style.css'}
+        paths={'/':'index.html','/app.js':'app.js','/sheet.js':'sheet.js','/rotation.js':'rotation.js','/style.css':'style.css'}
         if self.path not in paths: self.send(404,{'error':'Not found'}); return
         p=ROOT/'public'/paths[self.path]; self.send_response(200); self.send_header('Content-Type',{'html':'text/html','js':'text/javascript','css':'text/css'}[p.suffix[1:]]+'; charset=utf-8'); self.send_header('X-Content-Type-Options','nosniff'); self.send_header('Content-Security-Policy',"default-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'"); self.end_headers(); self.wfile.write(p.read_bytes())
     def do_POST(self):

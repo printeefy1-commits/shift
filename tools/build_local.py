@@ -10,7 +10,7 @@ names={n:i+1 for i,n in enumerate(NAMES)}
 seed={'workers':[{'id':names[n],'name':n,**contacts[n],'kind':'day' if n in ['Sid Ali','Yougo','Lamine'] else 'both','friday':n not in ['Sid Ali','Lamine']} for n in NAMES], 'months':{'2026-11':[{'date':f'2026-11-{i+1:02}','day':[names[CODES[x]] for x in row.split()],'night':[names[CODES[NIGHT[i]]]]} for i,row in enumerate(DAY)]},'holidays':{},'identities':names}
 serialize=lambda v:json.dumps(v,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
 html=(ROOT/'public/index.html').read_text()
-html=html.replace('<link rel="stylesheet" href="/style.css">','<style>'+(ROOT/'public/style.css').read_text()+'\n.local-tools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 24px;background:#edf2e6;border-bottom:1px solid #dfe6d8;align-items:center}.local-tools small{margin-right:auto;color:#5c6d4d;font-size:11px}@media print{.local-tools{display:none}}\n</style>').replace('<script src="/app.js" defer></script>','').replace('<script src="/sheet.js" defer></script>','')
+html=html.replace('<link rel="stylesheet" href="/style.css">','<style>'+(ROOT/'public/style.css').read_text()+'\n.local-tools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 24px;background:#edf2e6;border-bottom:1px solid #dfe6d8;align-items:center}.local-tools small{margin-right:auto;color:#5c6d4d;font-size:11px}@media print{.local-tools{display:none}}\n</style>').replace('<script src="/app.js" defer></script>','').replace('<script src="/sheet.js" defer></script>','').replace('<script src="/rotation.js" defer></script>','')
 html=html.replace('href="/"','href="#"').replace('Shared workspace','Local workspace')
 html=html.replace('<main>','<div class="local-tools"><small id="localMode">Offline local edition · Saved in this browser</small><button id="enablePassword" class="button admin-only" hidden>Enable password protection</button><button id="exportBackup" class="button admin-only" hidden>Export backup</button><button id="importBackup" class="button admin-only" hidden>Restore backup</button><button id="exportViewer" class="button admin-only" hidden>Share read-only copy</button><input id="backupFile" type="file" accept=".json,application/json" hidden></div><main>')
 app=(ROOT/'public/app.js').read_text();start=app.index('async function api(');end=app.index('async function refresh()',start)
@@ -18,7 +18,7 @@ app=app[:start]+'async function api(path,body){return LocalShift.api(path,body);
 app=app.replace('Everyone can see the latest schedule.','The schedule is saved in this browser.').replace('Your team can now view it.','Export a new read-only copy to share the update.').replace('Everyone can see the latest schedule.','Saved locally.').replace('for everyone to view?','in this browser?').replace('Administrator access needs to be configured by the server owner.','Use Set up administrator to create a local password.')
 scripts='<script id="local-config">window.LOCAL_CONFIG='+serialize({'readOnly':False,'requirePassword':False,'seed':seed})+';</script>\n<script>window.LOCAL_ARCHIVE='+(ROOT/'resources/history.json').read_text().strip().replace('<','\\u003c')+';</script>\n'
 storage='try {\n'+(ROOT/'local/storage.js').read_text()+'\n} catch (error) { window.LocalShift={api:async()=>{throw new Error(error.message);}}; }'
-for source in [(ROOT/'public/sheet.js').read_text(),(ROOT/'local/engine.js').read_text(),storage,app,(ROOT/'local/controls.js').read_text()]:scripts+='<script>'+source.replace('</script','<\\/script')+'</script>\n'
+for source in [(ROOT/'public/sheet.js').read_text(),(ROOT/'public/rotation.js').read_text(),(ROOT/'local/engine.js').read_text(),storage,app,(ROOT/'local/controls.js').read_text()]:scripts+='<script>'+source.replace('</script','<\\/script')+'</script>\n'
 html=html.replace('</body>',scripts+'</body>')
 (ROOT/'local/index.html').write_text(html)
 readme='''SHIFT — FULL LOCAL EDITION
@@ -57,7 +57,15 @@ Click a time heading to edit it. Comfortable view enlarges the cells.
 Switch engineers offers pair-only changes or replanning remaining turns.
 Recovery is two days after each actual evening block.
 Phone numbers and full names are editable in Team members.
-Configure day one, then choose Plan month from first day to generate a draft.
+Choose Plan weekly rotation, review the starting roles and select each Friday.
+After D, daytime lasts 1 week with 5 rotating engineers, 2 with 6, or 3 with 7.
+Then Saturday daytime prepares the Sunday-Tuesday evening block.
+Friday recovery is the following Sunday. Yougo is eligible for Friday; when
+he works Friday, B's candidate keeps the next Wednesday-Saturday night turn.
+Drag engineers on the same date to choose a one-shift swap or a cycle change.
+The cycle option follows rules 5/8 from that date; earlier dates stay unchanged.
+Daytime-only engineers keep the final columns. Holidays use the shared turn,
+with an optional administrator override. Cancel/discard keeps published data.
 Review it and publish/save. Leave/training/illness apply only to that date.
 Export a backup before updating. Replace index.html at the SAME location and
 use the SAME browser/profile to retain existing schedules and data. The storage

@@ -34,7 +34,15 @@ Click a time heading to edit it. Comfortable view enlarges the cells.
 Switch engineers offers pair-only changes or replanning remaining turns.
 Recovery is two days after each actual evening block.
 Phone numbers and full names are editable in Team members.
-Configure day one, then choose Plan month from first day to generate a draft.
+Choose Plan weekly rotation, review the starting roles and select each Friday.
+After D, daytime lasts 1 week with 5 rotating engineers, 2 with 6, or 3 with 7.
+Then Saturday daytime prepares the Sunday-Tuesday evening block.
+Friday recovery is the following Sunday. Yougo is eligible for Friday; when
+he works Friday, B's candidate keeps the next Wednesday-Saturday night turn.
+Drag engineers on the same date to choose a one-shift swap or a cycle change.
+The cycle option follows rules 5/8 from that date; earlier dates stay unchanged.
+Daytime-only engineers keep the final columns. Holidays use the shared turn,
+with an optional administrator override. Cancel/discard keeps published data.
 Review it and publish/save. Leave/training/illness apply only to that date.
 Export a backup before updating. Replace index.html at the SAME location and
 use the SAME browser/profile to retain existing schedules and data. The storage

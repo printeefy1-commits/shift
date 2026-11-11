@@ -20,3 +20,5 @@
 @media(max-width:900px){.contact-directory{display:none}.sheet-mode #engineerSheet{min-width:850px}.sheet-mode .sheet-cell{height:20px}.sheet-mode .toolbar .actions{gap:5px}.sheet-mode .sheet-actions .actions{margin-top:6px}.sheet-mode .sheet-actions{flex-wrap:wrap}}@media print{.contact-directory{display:none}.column-time{padding:2px;font-size:7px}.sheet-mode .sheet-cell{height:auto;min-height:13px}.sheet-mode .sheet-cell strong{font-size:7px}}
 #engineerSheet thead th{background:#9b3400}.column-time{font-style:italic}.sheet-mode .sheet-actions{display:flex}.sheet-mode .sheet-actions>.actions{flex-wrap:nowrap}
 .sheet-mode #engineerSheet tbody th,.sheet-mode #engineerSheet tbody td{line-height:1}.sheet-mode .sheet-cell{height:var(--sheet-row-height,14px)}.sheet-mode .sheet-cell strong{font-size:9px;line-height:1}
+
+.sheet-cell[draggable="true"]{cursor:grab}.sheet-cell.dragging{opacity:.45}.sheet-cell.drop-target{outline:3px solid #184f38;outline-offset:-3px;background:#bce1c0}

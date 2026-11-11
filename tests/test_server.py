@@ -1,4 +1,4 @@
-import unittest, tempfile, json, threading, urllib.request, urllib.error, os
+import unittest, tempfile, json, threading, urllib.request, urllib.error, os, subprocess, shutil
 from pathlib import Path
 import server
 
@@ -21,6 +21,19 @@ class ShiftTests(unittest.TestCase):
         if cookie: headers['Cookie']=cookie
         req=urllib.request.Request(self.base+path,data=None if data is None else json.dumps(data).encode(),headers=headers)
         return urllib.request.urlopen(req)
+    @unittest.skipUnless(shutil.which('node'),'Node required for weekly planner integration')
+    def test_weekly_rotation_asset_and_publication_roundtrip(self):
+        self.assertIn(b'window.ShiftRotation',self.request('/rotation.js').read())
+        state=json.load(self.request('/api/state'))
+        script="""const fs=require('fs'),vm=require('vm');global.window={};vm.runInThisContext(fs.readFileSync('public/rotation.js','utf8'));const w=JSON.parse(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(window.ShiftRotation.generate('2027-08',w,{},{},{order:[1,2,3,4,8,9],fridays:{'2027-08-06':6,'2027-08-13':6,'2027-08-20':6,'2027-08-27':6,'2027-09-03':6}})));"""
+        proc=subprocess.run(['node','-e',script],cwd=Path(server.__file__).parent,input=json.dumps(state['workers']),capture_output=True,text=True,check=True)
+        rows=json.loads(proc.stdout)
+        login=self.request('/api/login',{'username':'admin','password':'test-password-1234'});cookie=login.headers['Set-Cookie'].split(';')[0]
+        self.request('/api/month',{'month':'2027-08','roster':rows},cookie)
+        saved=json.load(self.request('/api/state'))
+        self.assertEqual(saved['months']['2027-08'],rows)
+        self.assertEqual(saved['months']['2026-11'],state['months']['2026-11'])
+
     def test_history_read_only_api(self):
         archive=json.load(self.request('/api/history'))
         self.assertEqual(archive['metadata']['days'],1064)
